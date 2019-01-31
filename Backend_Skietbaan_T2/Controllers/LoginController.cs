@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend_Skietbaan_T2.Models;
+using Backend_Skietbaan_T2.RequestModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,12 +27,12 @@ namespace Backend_Skietbaan_T2.Controllers
         }
         // POST: api/Login
         [HttpPost]
-        public async Task<ActionResult<string>> VerifyUser([FromBody] string username , [FromBody] string password)
+        public ActionResult<string> VerifyUser([FromBody] RequestUser Person)
         {
             List<User> users = _context.Users.ToList<User>();
             for(int i = 0; i < users.Count; i++)
             {
-                if(users.ElementAt(i).Username.Equals(username) && users.ElementAt(i).Password.Equals(password))
+                if(users.ElementAt(i).Username.Equals(Person.Username) && users.ElementAt(i).Password.Equals(Person.Password))
                 {
                     return "access granted";
                 }

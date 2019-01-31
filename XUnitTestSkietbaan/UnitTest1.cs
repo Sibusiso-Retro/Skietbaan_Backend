@@ -1,5 +1,6 @@
 using Backend_Skietbaan_T2.Controllers;
 using Backend_Skietbaan_T2.Models;
+using Backend_Skietbaan_T2.RequestModels;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
@@ -74,7 +75,8 @@ namespace XUnitTestSkietbaan
         {
             //Act
             _loginController = new LoginController(getTestDatabase());
-            string response = _loginController.VerifyUser(username, password).Result.Value;
+            var userRequest = new RequestUser { Username = username, Password = password };
+            string response = _loginController.VerifyUser(userRequest).ToString();
             //Assert
             Assert.Equal(result, response);
         }
