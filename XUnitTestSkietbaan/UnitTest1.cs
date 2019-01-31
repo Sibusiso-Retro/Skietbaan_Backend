@@ -74,9 +74,33 @@ namespace XUnitTestSkietbaan
         {
             //Act
             _loginController = new LoginController(getTestDatabase());
-            string response = _loginController.VerifyUser(username, password).Result.Value;
+            User user = new User();
+            user.Id = 0;
+            user.Username = username;
+            user.Password = password;
+            string response = _loginController.VerifyUser(user).Result.Value;
             //Assert
             Assert.Equal(result, response);
         }
+
+        //[Theory]
+        //[InlineData(1, "zintle", "Skosana", "123", false)]
+        //[InlineData(2, "Mandla", "Masombuka", "456", false)]
+        //[InlineData(null, "Mandla", "Masombuka", "456", false)]
+        //[InlineData(null, "Thandaza", "Bathande", "246", true)]
+        //[InlineData(0, "Mandla", "Masombuka", "456", false)]
+        //public void TestRegister(int Id,string username,string surname, string password, string result)
+        //{
+        //    //Act
+        //    _loginController = new LoginController(getTestDatabase());
+        //    User user = new User();
+        //    user.Id = Id;
+        //    user.Username = username;
+        //    user.Password = password;
+        //    string response = _loginController.VerifyUser(user).Result.Value;
+        //    //Assert
+        //    Assert.Equal(result, response);
+        //}
+
     }
 }
