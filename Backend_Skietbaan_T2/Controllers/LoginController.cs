@@ -17,21 +17,16 @@ namespace Backend_Skietbaan_T2.Controllers
         {
             _context = db;
         }
-
-        // GET: api/Login
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
         // POST: api/Login
         [HttpPost]
-        public async Task<ActionResult<string>> VerifyUser([FromBody] string username , [FromBody] string password)
+        public async Task<ActionResult<string>> VerifyUser([FromBody] User user)
         {
+            if (user == null || user.Username == null || user.Password == null) BadRequest();
+
             List<User> users = _context.Users.ToList<User>();
             for(int i = 0; i < users.Count; i++)
             {
-                if(users.ElementAt(i).Username.Equals(username) && users.ElementAt(i).Password.Equals(password))
+                if(users.ElementAt(i).Username.Equals(user.Username) && users.ElementAt(i).Password.Equals(user.Password))
                 {
                     return "access granted";
                 }

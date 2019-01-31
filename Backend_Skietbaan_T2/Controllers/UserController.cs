@@ -7,6 +7,8 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Net;
 
 namespace Backend_Skietbaan_T2.Controllers
 {
@@ -50,26 +52,32 @@ namespace Backend_Skietbaan_T2.Controllers
 
         // POST: api/User
         [HttpPost]
-        public async void Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody] User user)
         {
+
+            if (user == null)
+            {
+                return BadRequest("Invalid user Id");
+            }
+            else if (user.Id <= 0)
+            {
+                return BadRequest("Invalid user Id");
+            }
+            else
+            {
+                List<User> users = _context.Users.ToList();
+                for(int i = 0; i < users.Count; i++)
+                {
+                    User tmpUser = users.ElementAt(i);
+                    if(tmpUser.Username.Equals(user.Username) && tmpUser.Surname.Equals(user.Surname))
+                    {
+                        return BadRequest("User already exist");
+                    }
+                }
+            }
             _context.Users.Add(user);
             _context.SaveChanges();
-        }
-
-        // PUT: api/User/5
-        [HttpPut]
-        public async void Put([FromBody] User user)
-        {
-            _context.Users.Update(user);
-            _context.SaveChanges();
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete]
-        public async void Delete(User user)
-        {
-            _context.Users.Remove(user);
-            _context.SaveChanges();
+            return new OkResult();
         }
     }
 }
